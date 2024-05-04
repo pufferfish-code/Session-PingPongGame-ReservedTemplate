@@ -20,7 +20,21 @@ class GameSprite(sprite.Sprite):
 
     def reset(self):
         window.blit(self.image, (self.rect.x, self.rect.y))
-        
+#класс-наследник для спрайта-игрока (управляется стрелками)
+class Player(GameSprite):
+    def update_r(self):
+        keys = key.get_pressed()
+        if keys[K_UP] and self.rect.y > 5:
+            self.rect.y -= self.speed
+        if keys[K_DOWN] and self.rect.y < win_height - 80:
+            self.rect.y += self.speed
+    def update_l(self):
+        keys = key.get_pressed()
+        if keys[K_w] and self.rect.y > 5:
+            self.rect.y -= self.speed
+        if keys[K_s] and self.rect.y < win_height - 80:
+            self.rect.y += self.speed
+            
 #Игровая сцена:
 back = (200, 255, 255) # цвет фона (background)
 win_width = 600
@@ -36,7 +50,11 @@ FPS = 60
 
 #создания мяча и ракетки 
 ball = GameSprite('tenis_ball.png', 200, 200, 4, 50, 50)
+racket1 = Player('racket.png', 30, 200, 4, 50, 150) # при созданни спрайта добавляется еще два параметра
+racket2 = Player('racket.png', 520, 200, 4, 50, 150)
 
+speed_x = 3
+speed_y = 3
 
 while game:
     for e in event.get():
@@ -45,6 +63,13 @@ while game:
     
     if finish != True:
         window.fill(back)
+        racket1.update_l()
+        racket2.update_r()
+        ball.rect.x += speed_x
+        ball.rect.y += speed_y
+        racket1.reset()
+        racket2.reset()
         ball.reset()
     display.update()
     clock.tick(FPS)
+
